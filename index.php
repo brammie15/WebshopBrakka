@@ -7,18 +7,30 @@
     }
 
 //    check the session
+
     session_start();
     if(isset($_SESSION['user'])){
         $user = $_SESSION['user'];
     }
-    if(isset($_GET['product']) && isset($_GET['amount'])){
-        $product = $_GET['product'];
-        $amount = $_GET['amount'];
-        $query = $db->query("SELECT * FROM `shop`.products WHERE naam = '$product'");
+    if(isset($_GET['product']) && isset($_GET['amount']) && isset($_SESSION['user'])){
+        echo "test";
+        $productNaam = $_GET['product'];
+        $aantal = $_GET['aantal'];
+        $query = $db->query("SELECT * FROM `shop`.products WHERE naam = '$productNaam'");
         $product = $query->fetch();
         $prijs = $product['prijs'];
-        $prijs = $prijs * $amount;
-        echo "U heeft $amount $product toegevoegd aan uw winkelmandje voor $prijs euro";
+        $totaalPrijs = $prijs * $aantal;
+        if(!isset($_SESSION['winkelmandje'])){
+            $_SESSION['winkelmandje'] = [];
+        }
+        $_SESSION['winkelmandje'][] = [
+            'naam' => $productNaam,
+            'aantal' => $aantal,
+            'prijs' => $prijs,
+            'totaalPrijs' => $totaalPrijs
+        ];
+    }elseif(isset($_GET['product']) && isset($_GET['amount']) && !isset($_SESSION['user'])){
+        header("Location: login.php");
     }
 
     function createCard($naam, $prijs){
@@ -28,7 +40,7 @@
             <h2>$naam</h2>
             <p>$prijs Euro</p>
             <form action="index.php" method="get">
-                <input type="number" name="amount" value="1">
+                <input type="number" name="aantal" value="1">
                 <input type="hidden" name="product" value="$naam">
                 <input type="submit" value="Add to cart">
             </form>
@@ -67,7 +79,7 @@ HTML;
 
     <div id="top">
         <?php if(isset($_SESSION['user'])): ?>
-            <h1 id="welkomText">Welkom <?=$_SESSION['user']?></h1>
+            <h1 id="welkomText">Welkom <?= $_SESSION['user'] ?> En welkom</h1>
         <?php endif; ?>
         <h3>Welkom op de website van de webshop</h3>
         <p>Op deze website kunt u producten kopen</p>
