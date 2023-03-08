@@ -7,30 +7,6 @@ body{
     font-family: Arial, Helvetica, sans-serif;
 }
 
-ul{
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
-    overflow: hidden;
-    background-color: #333;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-}
-
-li > a{
-    display: block;
-    color: white;
-    text-align: center;
-    padding: 14px 16px;
-    text-decoration: none;
-}
-
-li > a:hover{
-    background-color: #111;
-    cursor: pointer;
-}
-
 #listContainer{
     display: flex;
     flex-wrap: wrap;
@@ -99,5 +75,37 @@ form{
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
+}
+
+#underList{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 80%;
+}
+
+#underList > form > input{
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    box-sizing: border-box;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#underList > form > input[type=submit]{
+    background-color: #04AA6D;
+    color: white;
+    padding: 14px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#underList > form > input[type=submit]:hover{
+    background-color: #45a049;
 }
 

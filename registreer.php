@@ -12,9 +12,10 @@
     $conn = getDatabaseConnection();
 
     if($hasBeenSubmitted){
-$email = $_POST['email'];
+        $email = $_POST['email'];
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
+        $phoneNumber = $_POST['phoneNumber'];
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         if($password != $password2){
@@ -22,7 +23,7 @@ $email = $_POST['email'];
         }
 
         if(strlen($error) == 0){
-            $query = $conn->query("SELECT * FROM `shop`.users WHERE email = '$email'");
+            $query = $conn->query("SELECT * FROM `webshop`.user WHERE `webshop`.user.email = '$email'");
             $user = $query->fetch();
             if($user){
                 $error = "Email is al in gebruik";
@@ -30,13 +31,12 @@ $email = $_POST['email'];
         }
 
         if(strlen($error) == 0){
-            $query = $conn->query("INSERT INTO `shop`.users (email, password) VALUES ('$email', '$hashedPassword')");
+            $query = $conn->query("INSERT INTO `webshop`.user (email, passwordHash, phoneNumber) VALUES ('$email', '$hashedPassword', $phoneNumber)");
             session_start();
             $_SESSION["user"] = $email;
             header("Location: index.php");
         }
     }
-
 ?>
 
 <!doctype html>
@@ -56,6 +56,8 @@ $email = $_POST['email'];
             <h1>Registreer</h1>
             <label for="email">Email</label>
             <input name="email" type="email" id="email" required>
+            <label for="phoneNumber" >Telefoon Nummer</label>
+            <input name="phoneNumber" type="tel" id="phoneNumber" required>
             <label for="password">Wachtwoord</label>
             <input id="password" name="password" type="password">
 

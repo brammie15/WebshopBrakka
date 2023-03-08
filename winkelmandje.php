@@ -13,7 +13,27 @@
         $isWinkelmandjeLeeg = false;
     }
 
+    //Remove duplicate products
+    //TODO: Make this not required
+if(!$isWinkelmandjeLeeg){
+    foreach ($_SESSION["winkelmandje"] as $key => $value) {
+        foreach ($_SESSION["winkelmandje"] as $key2 => $value2) {
+            if($key != $key2){
+                if($value["naam"] == $value2["naam"]){
+                    $value["aantal"] += $value2["aantal"];
+                    $_SESSION["winkelmandje"][$key] = $value;
+                    unset($_SESSION["winkelmandje"][$key2]);
+                }
+            }
+        }
+    }
+}
+
     if(isset($_GET["remove"])){
+        if(sizeof($_SESSION["winkelmandje"]) == 1){
+            $_SESSION["winkelmandje"] = [];
+            header("Location: winkelmandje.php");
+        }
         $index = $_GET["remove"];
         $winkelmandje = $_SESSION["winkelmandje"];
         array_splice($winkelmandje, $index, 1);
@@ -22,14 +42,14 @@
     }
 
     function generateRow($index, $product){
-        $totaal = $product["prijs"] * $product["aantal"];
+        $totaal = $product["price"] * $product["amount"];
         return <<<HTML
             <tr>
                 <td>{$index}</td>
                 <td>{$product["naam"]}</td>
-                <td>{$product["prijs"]}</td>
+                <td>{$product["prijs"]} €</td>
                 <td>{$product["aantal"]}</td>
-                <td>{$totaal}</td>
+                <td>{$totaal} €</td>
                 <td><a id="verwijder" href="winkelmandje.php?remove={$index}">Verwijder</a></td>
             </tr>
 HTML;
@@ -45,6 +65,7 @@ HTML;
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="winkelmandje.css">
+    <link rel="stylesheet" href="navbar.css">
     <title>WinkelMandje</title>
 </head>
 <body>
@@ -83,27 +104,28 @@ HTML;
 //                echo explode($_SESSION["winkelmandje"]);
                 $winkelmandje = $_SESSION["winkelmandje"];
                 for($i = 0; $i < count($winkelmandje); $i++){
-                    echo generateRow($i, $winkelmandje[$i]);
+                    echo generateRow($i+1, $winkelmandje[$i]);
                 }
             ?>
         </table>
-        <div id="totalPrice">
-            <p>Totaal: € 1000</p>
+        <div id="underList">
+            <div id="totalPrice">
+                <p>Totaal: <?php
+                    $totaal = 0;
+                    foreach ($winkelmandje as $product){
+                        $totaal += $product["prijs"] * $product["aantal"];
+                    }
+                    echo $totaal;
+                    ?> €</p>
+            </div>
+            <form action="bestel.php" method="post">
+                <input type="submit" name="submit" value="Bestellen">
+            </form>
+
         </div>
-        <form action="winkelmandje.php" method="post">
-            <input type="submit" name="submit" value="Bestellen">
-        </form>
     </div>
     <?php endif; ?>
 
-    <?php
-        $producten = $_SESSION["winkelmandje"];
-        foreach ($producten as $product){
-            echo $product["naam"];
-            echo $product["prijs"];
-            echo $product["aantal"];
-        }
-    ?>
 
 </main>
 

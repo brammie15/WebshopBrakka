@@ -32,14 +32,18 @@ if($hasSubmitted){
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
 
-    $query = $db->query("SELECT * FROM `shop`.users WHERE email = '$email'");
+    $query = $db->query("SELECT user.email, user.passwordHash FROM `webshop`.user WHERE `webshop`.user.email = '$email'");
     $user = $query->fetch();
-    $userPassword = $user['password'];
-
-    if(!password_verify($password, $userPassword)){
-        $error = "Email or password is incorrect";
+    echo implode(",", $user);
+    if(!$user){
+        $error = "Email or password is incorrect, User not found";
     }
-
+    if(strlen($error) == 0){
+        $userPassword = $user['passwordHash'];
+        if(!password_verify($password, $userPassword)){
+            $error = "Email or password is incorrect, Password Incorrect";
+        }
+    }
     if(strlen($error) == 0){
         session_start();
         $_SESSION["user"] = $email;

@@ -6,34 +6,45 @@
         $db_success = true;
     }
 
-//    check the session
 
     session_start();
     if(isset($_SESSION['user'])){
-        $user = $_SESSION['user'];
+        $listProduct = $_SESSION['user'];
     }
-    if(isset($_GET['product']) && isset($_GET['amount']) && isset($_SESSION['user'])){
-        echo "test";
+    if(isset($_GET['product']) && isset($_GET['aantal']) && isset($_SESSION['user'])){
         $productNaam = $_GET['product'];
         $aantal = $_GET['aantal'];
-        $query = $db->query("SELECT * FROM `shop`.products WHERE naam = '$productNaam'");
+        $query = $db->query("SELECT * FROM `webshop`.product WHERE name = '$productNaam'");
         $product = $query->fetch();
-        $prijs = $product['prijs'];
+        $prijs = $product['price'];
         $totaalPrijs = $prijs * $aantal;
         if(!isset($_SESSION['winkelmandje'])){
             $_SESSION['winkelmandje'] = [];
         }
-        $_SESSION['winkelmandje'][] = [
-            'naam' => $productNaam,
-            'aantal' => $aantal,
-            'prijs' => $prijs,
-            'totaalPrijs' => $totaalPrijs
-        ];
-    }elseif(isset($_GET['product']) && isset($_GET['amount']) && !isset($_SESSION['user'])){
+        //check if product is already in the cart
+        $productInCart = false;
+        foreach($_SESSION['winkelmandje'] as $key => $product){
+            if($product['naam'] == $productNaam){
+                $productInCart = true;
+                $_SESSION['winkelmandje'][$key]['aantal'] += $aantal;
+                $_SESSION['winkelmandje'][$key]['totaalPrijs'] += $totaalPrijs;
+            }
+        }
+        if(!$productInCart){
+            $_SESSION['winkelmandje'][] = [
+                'naam' => $productNaam,
+                'aantal' => $aantal,
+                'prijs' => $prijs,
+                'totaalPrijs' => $totaalPrijs
+            ];
+        }
+    }elseif(isset($_GET['product']) && isset($_GET['aantal']) && !isset($_SESSION['user'])){
         header("Location: login.php");
     }
 
     function createCard($naam, $prijs){
+        $product_url = "onclick=\"location.href='krijgProduct.php?product=$naam'\"";
+
         return <<<HTML
         <div class="productCard">
             <img src="https://via.placeholder.com/256" alt="placeholder">
@@ -44,6 +55,7 @@
                 <input type="hidden" name="product" value="$naam">
                 <input type="submit" value="Add to cart">
             </form>
+            
         </div>
 HTML;
 
@@ -59,10 +71,10 @@ HTML;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="navbar.css">
     <title>Document</title>
 </head>
 <body>
-
 <nav>
     <ul>
         <li><a href="index.php">Home</a></li>
@@ -88,10 +100,10 @@ HTML;
     <div id="productsContainer">
         <?php
         if ($db_success){
-            $query = $db->query("SELECT * FROM `shop`.products");
-            $users = $query->fetchAll();
-            foreach ($users as $user){
-                echo createCard($user['naam'], $user['prijs']);
+            $query = $db->query("SELECT * FROM `webshop`.product");
+            $products = $query->fetchAll();
+            foreach ($products as $listProduct){
+                echo createCard($listProduct['name'], $listProduct['price']);
             }
         }
         ?>
