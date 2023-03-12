@@ -55,6 +55,9 @@
                 <input type="hidden" name="product" value="$naam">
                 <input type="submit" value="Add to cart">
             </form>
+            <form>
+                <input type="button" value="Details" $product_url>
+            </form>
             
         </div>
 HTML;

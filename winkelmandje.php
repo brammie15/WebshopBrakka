@@ -42,7 +42,7 @@ if(!$isWinkelmandjeLeeg){
     }
 
     function generateRow($index, $product){
-        $totaal = $product["price"] * $product["amount"];
+        $totaal = $product["prijs"] * $product["aantal"];
         return <<<HTML
             <tr>
                 <td>{$index}</td>
