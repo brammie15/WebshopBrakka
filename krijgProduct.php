@@ -5,7 +5,7 @@
     }
     $product = $_GET["product"];
     $db = getDatabaseConnection();
-    $query = $db->query("SELECT * FROM `shop`.products WHERE name = '$product'");
+    $query = $db->query("SELECT * FROM `webshop`.product WHERE `webshop`.product.Name  = '$product'");
     $product = $query->fetch();
 
 
@@ -18,6 +18,8 @@
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="krijgProduct.css">
+    <link rel="stylesheet" href="navbar.css">
     <title>Document</title>
 </head>
 <body>
@@ -34,14 +36,36 @@
 </nav>
 
 <main>
-    <?php
-    if($product){
-        echo "<h1>".$product["name"]."</h1>";
-        echo "<p>".$product["description"]."</p>";
-        echo "<p>".$product["price"]."</p>";
-    }else{
-        echo "<h1>Product niet gevonden</h1>";
-    }?>
+<!--    --><?php
+//    if($product){
+//        echo "<h1>".$product["name"]."</h1>";
+//        echo "<p>".$product["description"]."</p>";
+//        echo "<p>".$product["price"]."</p>";
+//    }else{
+//        echo "<h1>Product niet gevonden</h1>";
+//    }?>
+    <div class="parent">
+        <div class="child img-container">
+<!--            <img src="--><?//=$product["imageUrl"] ?><!--" alt="--><?//=$product["name"]?><!--">-->
+            <div>
+                <img src="https://via.placeholder.com/256" alt="placeholder">
+            </div>
+        </div>
+        <div class="child price-container">
+            <h1><?=$product["name"]?></h1>
+            <hr>
+            <p><?=$product["description"]?> Euro</p>
+            <br>
+            <p><?=$product["price"]?></p>
+            <div>
+                <form>
+                    <input type="number" name="aantal" value="1">
+                    <input type="hidden" name="product" value="<?=$product["name"]?>">
+                    <input type="submit" value="Add to cart">
+                </form>
+            </div>
+        </div>
+    </div>
 </main>
 
 </body>
