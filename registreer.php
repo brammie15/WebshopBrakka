@@ -23,7 +23,9 @@
         }
 
         if(strlen($error) == 0){
-            $query = $conn->query("SELECT * FROM `webshop`.user WHERE `webshop`.user.email = '$email'");
+            $query = $conn->prepare("SELECT * FROM `webshop`.user WHERE `webshop`.user.email = :email");
+            $query->bindParam(":email", $email);
+            $query->execute();
             $user = $query->fetch();
             if($user){
                 $error = "Email is al in gebruik";
@@ -31,7 +33,11 @@
         }
 
         if(strlen($error) == 0){
-            $query = $conn->query("INSERT INTO `webshop`.user (email, passwordHash, phoneNumber) VALUES ('$email', '$hashedPassword', $phoneNumber)");
+            $query = $conn->prepare("INSERT INTO `webshop`.user (email, passwordHash, phoneNumber) VALUES (:email, :passwordHash, :phoneNumber)");
+            $query->bindParam(":email", $email);
+            $query->bindParam(":passwordHash", $hashedPassword);
+            $query->bindParam(":phoneNumber", $phoneNumber);
+            $query->execute();
             session_start();
             $_SESSION["user"] = $email;
             header("Location: index.php");

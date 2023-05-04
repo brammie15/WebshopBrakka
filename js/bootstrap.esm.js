@@ -1918,7 +1918,7 @@ class Dropdown extends BaseComponent {
       }]
     };
 
-    // Disable Popper if we have a static display or Dropdown is in Navbar
+    // Disable Popper if we have a static display or Dropdown is in navbar
     if (this._inNavbar || this._config.display === 'static') {
       Manipulator.setDataAttribute(this._menu, 'popper', 'static'); // todo:v6 remove
       defaultBsPopperConfig.modifiers = [{

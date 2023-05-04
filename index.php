@@ -69,21 +69,11 @@ HTML;
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="navbar.css">
     <title>Webshop</title>
 </head>
-<body>
-<nav>
-    <ul>
-        <li><a href="index.php">Home</a></li>
-        <?php if(!isset($_SESSION['user'])): ?>
-            <li><a href="login.php">Login</a></li>
-        <?php else: ?>
-            <li><a href="logout.php">Logout</a></li>
-            <li><a href="winkelmandje.php">WinkelMandje</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
+<body><?php
+    include "navbar.php";
+?>
 
 <main>
 

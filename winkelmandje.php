@@ -7,7 +7,7 @@
     if(!$isLoggedin){
         header("Location: login.php");
     }
-    include "database.php";
+    include __DIR__."/database.php";
 
     $isWinkelmandjeLeeg = true;
     if(isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0){
@@ -53,12 +53,14 @@
         $totaal = $product["price"] * $aantal;
         return <<<HTML
             <tr>
-                <td>{$index}</td>
-                <td>{$product["name"]}</td>
-                <td>{$product["price"]} €</td>
-                <td>{$aantal}</td>
-                <td>€{$totaal}</td>
-                <td><a id="verwijder" href="winkelmandje.php?remove={$index}">Verwijder</a></td>
+                <form method="post">
+                    <td>{$index}</td>
+                    <td>{$product["name"]}</td>
+                    <td>{$product["price"]} €</td>
+                    <td><input type="number" min="0" value="{$aantal}"></td>
+                    <td>€{$totaal}</td>
+                    <td><a id="verwijder" href="winkelmandje.php?remove={$index}">Verwijder</a></td>
+                </form>
             </tr>
 HTML;
 
@@ -72,23 +74,12 @@ HTML;
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="winkelmandje.css">
-    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="winkelmandje.css" type="text/css">
     <title>WinkelMandje</title>
 </head>
 <body>
 
-<nav>
-    <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="login.php">Login</a></li>
-        <?php if(isset($_SESSION['user'])): ?>
-            <li><a href="logout.php">Logout</a></li>
-            <!--            <li><p id="welkomText">Welkom --><?php //=$_SESSION['user']?><!--</p></li>-->
-            <li><a href="winkelmandje.php">WinkelMandje</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
+<?php include "navbar.php" ?>
 
 <main>
     <?php if($isWinkelmandjeLeeg): ?>
@@ -121,6 +112,9 @@ HTML;
             <div id="totalPrice">
                 <p>Totaal: <?php
                     $totaal = 0;
+                    foreach($winkelmandje as $product){
+                        echo $product["id"];
+                    }
                     foreach ($winkelmandje as $product){
                         $totaal += $product["prijs"] * $product["aantal"];
                     }
@@ -134,10 +128,6 @@ HTML;
         </div>
     </div>
     <?php endif; ?>
-
-
 </main>
-
-
 </body>
 </html>

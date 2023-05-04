@@ -13,7 +13,7 @@ body{
     flex-wrap: wrap;
     justify-content: space-around;
     margin: 0 auto;
-    width: 80%;
+    width: 90%;
     /*background: #0a53be;*/
 }
 
@@ -34,7 +34,8 @@ body{
 }
 
 .productCard{
-    width: 30%;
+    width: 20%;
+    height: 20%;
     margin: 10px;
     background-color: white;
     border-radius: 5px;
