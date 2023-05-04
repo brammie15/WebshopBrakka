@@ -12,37 +12,32 @@
         $listProduct = $_SESSION['user'];
     }
     if(isset($_GET['product']) && isset($_GET['aantal']) && isset($_SESSION['user'])){
-        $productNaam = $_GET['product'];
+        $productId = $_GET['product'];
         $aantal = $_GET['aantal'];
-        $query = $db->query("SELECT * FROM `webshop`.product WHERE name = '$productNaam'");
+        $query = $db->query("SELECT * FROM `webshop`.product WHERE name = '$productId'");
         $product = $query->fetch();
-        $prijs = $product['price'];
-        $totaalPrijs = $prijs * $aantal;
         if(!isset($_SESSION['winkelmandje'])){
             $_SESSION['winkelmandje'] = [];
         }
         //check if product is already in the cart
         $productInCart = false;
         foreach($_SESSION['winkelmandje'] as $key => $product){
-            if($product['naam'] == $productNaam){
+            if($product['id'] == $productId){
                 $productInCart = true;
                 $_SESSION['winkelmandje'][$key]['aantal'] += $aantal;
-                $_SESSION['winkelmandje'][$key]['totaalPrijs'] += $totaalPrijs;
             }
         }
         if(!$productInCart){
             $_SESSION['winkelmandje'][] = [
-                'naam' => $productNaam,
+                'id' => $productId,
                 'aantal' => $aantal,
-                'prijs' => $prijs,
-                'totaalPrijs' => $totaalPrijs
             ];
         }
     }elseif(isset($_GET['product']) && isset($_GET['aantal']) && !isset($_SESSION['user'])){
         header("Location: login.php");
     }
 
-    function createCard($naam, $prijs){
+    function createCard($id, $naam, $prijs): string {
         $product_url = "onclick=\"location.href='krijgProduct.php?product=$naam'\"";
 
         return <<<HTML
@@ -52,7 +47,7 @@
             <p>$prijs Euro</p>
             <form action="index.php" method="get">
                 <input type="number" name="aantal" value="1">
-                <input type="hidden" name="product" value="$naam">
+                <input type="hidden" name="product" value="$id">
                 <input type="submit" value="Add to cart">
             </form>
             <form>
@@ -75,16 +70,16 @@ HTML;
 
     <link rel="stylesheet" href="index.css">
     <link rel="stylesheet" href="navbar.css">
-    <title>Document</title>
+    <title>Webshop</title>
 </head>
 <body>
 <nav>
     <ul>
         <li><a href="index.php">Home</a></li>
-        <li><a href="login.php">Login</a></li>
-        <?php if(isset($_SESSION['user'])): ?>
+        <?php if(!isset($_SESSION['user'])): ?>
+            <li><a href="login.php">Login</a></li>
+        <?php else: ?>
             <li><a href="logout.php">Logout</a></li>
-<!--            <li><p id="welkomText">Welkom --><?php //=$_SESSION['user']?><!--</p></li>-->
             <li><a href="winkelmandje.php">WinkelMandje</a></li>
         <?php endif; ?>
     </ul>
@@ -106,7 +101,7 @@ HTML;
             $query = $db->query("SELECT * FROM `webshop`.product");
             $products = $query->fetchAll();
             foreach ($products as $listProduct){
-                echo createCard($listProduct['name'], $listProduct['price']);
+                echo createCard($listProduct['productID'], $listProduct["name"], $listProduct['price']);
             }
         }
         ?>
