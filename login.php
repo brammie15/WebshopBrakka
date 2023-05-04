@@ -34,7 +34,6 @@ if($hasSubmitted){
 
     $query = $db->query("SELECT user.email, user.passwordHash FROM `webshop`.user WHERE `webshop`.user.email = '$email'");
     $user = $query->fetch();
-    echo implode(",", $user);
     if(!$user){
         $error = "Email or password is incorrect, User not found";
     }
