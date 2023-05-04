@@ -81,10 +81,10 @@ HTML;
 <nav>
     <ul>
         <li><a href="index.php">Home</a></li>
+        <?php if(!isset($_SESSION['user'])): ?>
         <li><a href="login.php">Login</a></li>
-        <?php if(isset($_SESSION['user'])): ?>
+        <?php else: ?>
             <li><a href="logout.php">Logout</a></li>
-<!--            <li><p id="welkomText">Welkom --><?php //=$_SESSION['user']?><!--</p></li>-->
             <li><a href="winkelmandje.php">WinkelMandje</a></li>
         <?php endif; ?>
     </ul>
@@ -106,7 +106,7 @@ HTML;
             $query = $db->query("SELECT * FROM `webshop`.product");
             $products = $query->fetchAll();
             foreach ($products as $listProduct){
-                echo createCard($listProduct['name'], $listProduct['price']);
+                echo createCard($listProduct['id'], $listProduct['price']);
             }
         }
         ?>
