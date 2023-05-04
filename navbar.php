@@ -8,6 +8,7 @@ if (isset($_SESSION['user'])) {
     unset($pages['login.php']);
     $pages['winkelmandje.php'] = 'Winkelmandje';
     $pages['account.php'] = 'Account';
+    $pages['admin.php'] = 'Admin';
     $pages['logout.php'] = 'Logout';
 }
 

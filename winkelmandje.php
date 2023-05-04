@@ -108,25 +108,25 @@ HTML;
             ?>
         </table>
 
-        <div id="underList">
-            <div id="totalPrice">
-                <p>Totaal: <?php
-                    $totaal = 0;
-                    foreach($winkelmandje as $product){
-                        echo $product["id"];
-                    }
-                    foreach ($winkelmandje as $product){
-                        $totaal += $product["prijs"] * $product["aantal"];
-                    }
-                    echo $totaal;
-                    ?> €</p>
-            </div>
-            <form action="bestel.php" method="post">
-                <input type="submit" name="submit" value="Bestellen">
-            </form>
-
-        </div>
-    </div>
+<!--        <div id="underList">-->
+<!--            <div id="totalPrice">-->
+<!--                <p>Totaal: --><?php
+//                    $totaal = 0;
+//                    foreach($winkelmandje as $product){
+//                        echo $product["id"];
+//                    }
+//                    foreach ($winkelmandje as $product){
+//                        $totaal += $product["prijs"] * $product["aantal"];
+//                    }
+//                    echo $totaal;
+//                    ?><!-- €</p>-->
+<!--            </div>-->
+<!--            <form action="bestel.php" method="post">-->
+<!--                <input type="submit" name="submit" value="Bestellen">-->
+<!--            </form>-->
+<!---->
+<!--        </div>-->
+<!--    </div>-->
     <?php endif; ?>
 </main>
 </body>

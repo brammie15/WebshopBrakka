@@ -5,8 +5,6 @@
     if($db){
         $db_success = true;
     }
-
-
     session_start();
     if(isset($_SESSION['user'])){
         $listProduct = $_SESSION['user'];
