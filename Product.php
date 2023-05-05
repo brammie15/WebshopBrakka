@@ -16,11 +16,11 @@ class Product{
         $this->category = $category;
     }
 
-    public static function fromId($db, $id): Product {
+    public static function fromId($db, $id): ?Product {
         $query = $db->query("SELECT * FROM `webshop`.product WHERE productID = '$id'");
         $product = $query->fetch();
         if(!$product) {
-            throw new Exception("Product not found");
+            return null;
         }
         return new Product($product["productID"], $product["name"], $product["price"], $product["description"], $product["imageUrl"], $product["categoryID"]);
     }

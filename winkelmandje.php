@@ -8,6 +8,12 @@
         header("Location: login.php");
     }
     include __DIR__."/database.php";
+    include __DIR__."/common.php";
+    include __DIR__."/product.php";
+
+    $db = getDatabaseConnection();
+    global $db;
+
 
     $isWinkelmandjeLeeg = true;
     if(isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0){
@@ -46,17 +52,20 @@
         header("Location: winkelmandje.php");
     }
 
-    function generateRow($index, $productId, $aantal): string {
-        $query = getDatabaseConnection()->query("SELECT * FROM `webshop`.product WHERE productID = '$productId'");
-        $product = $query->fetch();
+function generateRow($index, $productId, $aantal): string {
+        global $db;
+        $product = Product::fromId($db, $productId);
+        if(!$product){
+            return "<p>Error: Product not found</p>";
+        }
 
-        $totaal = $product["price"] * $aantal;
+        $totaal = $product->price * $aantal;
         return <<<HTML
             <tr>
                 <form method="post">
                     <td>{$index}</td>
-                    <td>{$product["name"]}</td>
-                    <td>{$product["price"]} €</td>
+                    <td>{$product->name}</td>
+                    <td>{$product->price} €</td>
                     <td><input type="number" min="0" value="{$aantal}"></td>
                     <td>€{$totaal}</td>
                     <td><a id="verwijder" href="winkelmandje.php?remove={$index}">Verwijder</a></td>
@@ -100,33 +109,12 @@ HTML;
                 <th>Remove</th>
             </tr>
             <?php
-//                echo explode($_SESSION["winkelmandje"]);
                 $winkelmandje = $_SESSION["winkelmandje"];
                 for($i = 0; $i < count($winkelmandje); $i++){
                     echo generateRow($i+1, $winkelmandje[$i]["id"], $winkelmandje[$i]["aantal"]);
                 }
             ?>
         </table>
-
-<!--        <div id="underList">-->
-<!--            <div id="totalPrice">-->
-<!--                <p>Totaal: --><?php
-//                    $totaal = 0;
-//                    foreach($winkelmandje as $product){
-//                        echo $product["id"];
-//                    }
-//                    foreach ($winkelmandje as $product){
-//                        $totaal += $product["prijs"] * $product["aantal"];
-//                    }
-//                    echo $totaal;
-//                    ?><!-- €</p>-->
-<!--            </div>-->
-<!--            <form action="bestel.php" method="post">-->
-<!--                <input type="submit" name="submit" value="Bestellen">-->
-<!--            </form>-->
-<!---->
-<!--        </div>-->
-<!--    </div>-->
     <?php endif; ?>
 </main>
 </body>

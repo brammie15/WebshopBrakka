@@ -9,5 +9,5 @@ if(isset($_GET["id"])){
         $db_success = true;
     }
     $query = $db->query("DELETE FROM `webshop`.product WHERE productID = '$id'");
-    header("Location: index.php");
+    header("Location: admin.php");
 }
