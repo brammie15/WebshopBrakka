@@ -17,7 +17,8 @@ class Product{
     }
 
     public static function fromId($db, $id): ?Product {
-        $query = $db->query("SELECT * FROM `webshop`.product WHERE productID = '$id'");
+        $query = $db->prepare("SELECT * FROM `webshop`.product WHERE productID = :id");
+        $query->bindParam(":id", $id);
         $product = $query->fetch();
         if(!$product) {
             return null;

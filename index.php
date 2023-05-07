@@ -1,20 +1,29 @@
 <?php
-include "database.php";
+include __DIR__."/database.php";
+include __DIR__."/common.php";
 $db = getDatabaseConnection();
 $db_success = false;
 if ($db) {
     $db_success = true;
 }
+
 session_start();
 if (isset($_SESSION['user'])) {
     $listProduct = $_SESSION['user'];
 }
-if (isset($_GET['product']) && isset($_GET['aantal']) && isset($_SESSION['user'])) {
+
+
+
+if (isGet(['product', 'aantal']) && isSession(['user'])) {
     $productId = $_GET['product'];
     $aantal = $_GET['aantal'];
-    $query = $db->query("SELECT * FROM `webshop`.product WHERE name = '$productId'");
-    $product = $query->fetch();
-    if (!isset($_SESSION['winkelmandje'])) {
+
+    $product = Product::fromId($db, $productId);
+    if (!$product) {
+        header("Location: index.php");
+    }
+
+    if (!isSession(['winkelmandje'])) {
         $_SESSION['winkelmandje'] = [];
     }
     //check if product is already in the cart
@@ -31,9 +40,11 @@ if (isset($_GET['product']) && isset($_GET['aantal']) && isset($_SESSION['user']
             'aantal' => $aantal,
         ];
     }
+    header("Location: index.php");
 } elseif (isset($_GET['product']) && isset($_GET['aantal']) && !isset($_SESSION['user'])) {
     header("Location: login.php");
 }
+
 
 function createCard($id, $naam, $prijs): string
 {

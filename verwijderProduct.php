@@ -10,4 +10,6 @@ if(isset($_GET["id"])){
     }
     $query = $db->query("DELETE FROM `webshop`.product WHERE productID = '$id'");
     header("Location: admin.php");
+}else{
+    header("Location: admin.php");
 }

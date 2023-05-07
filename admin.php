@@ -1,7 +1,11 @@
 <?php
 require_once __DIR__ . "/database.php";
+require_once __DIR__ . "/common.php";
+
+checkAuth(UserTypes::Employee);
 
 $conn = getDatabaseConnection();
+
 
 function createCard($name, $price)
 {
