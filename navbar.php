@@ -8,7 +8,7 @@ if (isset($_SESSION['user'])) {
     unset($pages['login.php']);
     $pages['winkelmandje.php'] = 'Winkelmandje';
     $pages['account.php'] = 'Account';
-    if($_SESSION['user']['type'] == UserTypes::Employee){
+    if($_SESSION['userType'] == UserTypes::Employee){
         $pages['admin.php'] = 'Admin';
     }
     $pages['logout.php'] = 'Logout';

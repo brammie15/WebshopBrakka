@@ -6,18 +6,14 @@ checkAuth(UserTypes::Employee);
 
 $conn = getDatabaseConnection();
 
-
-function createCard($name, $price)
-{
-    return "
+function createCard($name, $price): string {
+    return <<<HTML
             <div class='productCard'>
                 <h2>$name</h2>
                 <p>€$price</p>
             </div>
-        ";
+HTML;
 }
-
-
 ?>
 
 <!doctype html>

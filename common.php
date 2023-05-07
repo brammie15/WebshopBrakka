@@ -7,10 +7,13 @@ enum UserTypes{
 
 
 function checkAuth($AuthLevel): void {
-    if(!isset($_SESSION["user"])){
+    if(!isset($_SESSION)){
+        session_start();
+    }
+    if(!isSession(["user", "userType"])){
         header("Location: login.php");
     }
-    if($_SESSION["user"]["type"] != $AuthLevel){
+    if($_SESSION["userType"] != $AuthLevel){
         header("Location: unauthorized.php");
     }
 }

@@ -49,7 +49,7 @@ if($hasSubmitted){
     if(strlen($error) == 0){
         session_start();
         $_SESSION["user"] = $email;
-        $_SESSION["user"]["type"] = $accountType;
+            $_SESSION["userType"] = $accountType;
         header("Location: index.php");
     }
 }
@@ -70,7 +70,7 @@ if($hasSubmitted){
         <form action="login.php" method="post">
             <h1>Login</h1>
             <label for="email">Email</label>
-            <input name="email" type="email" id="email" required>
+            <input name="email" type="text" id="email" required>
             <label for="password">Password</label>
             <input id="password" name="password" type="password">
             <br>

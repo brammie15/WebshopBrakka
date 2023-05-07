@@ -1,17 +1,13 @@
 <?php
-include __DIR__."/database.php";
-include __DIR__."/common.php";
+include __DIR__ . "/database.php";
+include __DIR__ . "/common.php";
 $db = getDatabaseConnection();
-$db_success = false;
-if ($db) {
-    $db_success = true;
-}
+$db_success = !!$db;
 
 session_start();
-if (isset($_SESSION['user'])) {
-    $listProduct = $_SESSION['user'];
-}
-
+//if (isset($_SESSION['user'])) {
+//    $listProduct = $_SESSION['user'];
+//}
 
 
 if (isGet(['product', 'aantal']) && isSession(['user'])) {
@@ -41,15 +37,13 @@ if (isGet(['product', 'aantal']) && isSession(['user'])) {
         ];
     }
     header("Location: index.php");
-} elseif (isset($_GET['product']) && isset($_GET['aantal']) && !isset($_SESSION['user'])) {
+} elseif (isGet(['product', 'aantal']) && !isSession(['user'])) {
     header("Location: login.php");
 }
 
 
-function createCard($id, $naam, $prijs): string
-{
+function createCard($id, $naam, $prijs): string {
     $product_url = "onclick=\"location.href='krijgProduct.php?product=$naam'\"";
-
     return <<<HTML
         <div class="productCard">
             <img src="https://via.placeholder.com/256" alt="placeholder">
@@ -86,10 +80,19 @@ include "navbar.php";
 <main>
     <div id="top">
         <?php if (isset($_SESSION['user'])): ?>
-            <h1 id="welkomText">Welkom <?= $_SESSION['user'] ?> En welkom</h1>
+            <h1 id="welkomText">Welkom <?= $_SESSION['user'] ?></h1>
         <?php endif; ?>
-        <h3>Welkom op de website van de webshop</h3>
+        <h3>Op de website van de webshop</h3>
         <p>Op deze website kunt u producten kopen</p>
+<!--        --><?php
+//        if(isset($_SESSION['userType'])){
+//            echo match ($_SESSION['userType']) {
+//                UserTypes::Employee => "<p>U bent een medewerker</p>",
+//                UserTypes::Customer => "<p>U bent een Klant</p>",
+//                default => "<p>U bent een gast</p>",
+//            };
+//        }
+//        ?>
     </div>
 
     <div id="productsContainer">
