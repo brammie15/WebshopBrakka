@@ -1,23 +1,23 @@
 <?php
-    include "database.php";
-    include "common.php";
+include "database.php";
+include "common.php";
 
-    $db = getDatabaseConnection();
-    $db_success = false;
-    if($db){
-        $db_success = true;
-    }
+$db = getDatabaseConnection();
+$db_success = false;
+if ($db) {
+    $db_success = true;
+}
 
 $hasSubmitted = false;
-if(
+if (
     isset($_POST["email"]) and
     isset($_POST["password"])
-){
+) {
     $hasSubmitted = true;
 }
 $error = "";
 $code = "";
-if($hasSubmitted){
+if ($hasSubmitted) {
     $password = $_POST["password"];
     $email = $_POST["email"];
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
@@ -30,26 +30,26 @@ if($hasSubmitted){
     $employeeQuery = $db->query("SELECT employee.email, employee.passwordHash FROM `webshop`.employee WHERE `webshop`.employee.email = '$email'");
     $employee = $employeeQuery->fetch();
 
-    if(!$user && !$employee){
+    if (!$user && !$employee) {
         $error = "Email or password is incorrect, User not found";
     }
 
-    if(!$user and $employee){
+    if (!$user and $employee) {
         $user = $employee;
         $accountType = UserTypes::Employee;
     }
 
 
-    if(strlen($error) == 0){
+    if (strlen($error) == 0) {
         $userPassword = $user['passwordHash'];
-        if(!password_verify($password, $userPassword)){
+        if (!password_verify($password, $userPassword)) {
             $error = "Email or password is incorrect, Password Incorrect";
         }
     }
-    if(strlen($error) == 0){
+    if (strlen($error) == 0) {
         session_start();
         $_SESSION["user"] = $email;
-            $_SESSION["userType"] = $accountType;
+        $_SESSION["userType"] = $accountType;
         header("Location: index.php");
     }
 }
@@ -84,8 +84,8 @@ if($hasSubmitted){
             </div>
         </form>
         <?php
-        if(strlen($error) > 0){
-            echo "<p id='error'>".$error."</p>";
+        if (strlen($error) > 0) {
+            echo "<p id='error'>" . $error . "</p>";
         }
         ?>
     </div>

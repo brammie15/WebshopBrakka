@@ -1,6 +1,7 @@
 <?php
 include __DIR__ . "/database.php";
 include __DIR__ . "/common.php";
+include __DIR__. "/Product.php";
 $db = getDatabaseConnection();
 $db_success = !!$db;
 
@@ -42,16 +43,20 @@ if (isGet(['product', 'aantal']) && isSession(['user'])) {
 }
 
 
-function createCard($id, $naam, $prijs): string {
-    $product_url = "onclick=\"location.href='krijgProduct.php?product=$naam'\"";
+function createCard(Product $product): string {
+    $productID = $product->id;
+    $product_url = "onclick=\"location.href='krijgProduct.php?product=$productID'\"";
+    $image_url = file_exists(__DIR__."/".$product->imageUrl) ? $product->imageUrl : "https://via.placeholder.com/256";
+
+    $ballz = __DIR__.$product->imageUrl;
     return <<<HTML
         <div class="productCard">
-            <img src="https://via.placeholder.com/256" alt="placeholder">
-            <h2>$naam</h2>
-            <p>$prijs Euro</p>
+            <img src="$image_url" alt="placeholder">
+            <h2>$product->name</h2>
+            <p>$product->price Euro</p>
             <form action="index.php" method="get">
                 <input type="number" name="aantal" value="1">
-                <input type="hidden" name="product" value="$id">
+                <input type="hidden" name="product" value="$product->id">
                 <input type="submit" value="Add to cart">
             </form>
             <form>
@@ -100,8 +105,10 @@ include "navbar.php";
         if ($db_success) {
             $query = $db->query("SELECT * FROM `webshop`.product");
             $products = $query->fetchAll();
+
             foreach ($products as $listProduct) {
-                echo createCard($listProduct['productID'], $listProduct["name"], $listProduct['price']);
+                $productObj = Product::fromId($db, $listProduct['productID']);
+                echo createCard($productObj);
             }
         }
         ?>

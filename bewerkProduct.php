@@ -1,7 +1,9 @@
 <?php
 include "database.php";
 include "Product.php";
+include "common.php";
 session_start();
+checkAuth(UserTypes::Employee);
 if(!isset($_SESSION['user'])){
     header("Location: login.php");
 }

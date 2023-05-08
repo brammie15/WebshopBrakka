@@ -1,12 +1,13 @@
 <?php
-require_once __DIR__ . "/database.php";
-require_once __DIR__ . "/common.php";
+require_once "database.php";
+require_once "common.php";
 
 checkAuth(UserTypes::Employee);
 
 $conn = getDatabaseConnection();
 
-function createCard($name, $price): string {
+function createCard($name, $price): string
+{
     return <<<HTML
             <div class='productCard'>
                 <h2>$name</h2>
@@ -14,6 +15,7 @@ function createCard($name, $price): string {
             </div>
 HTML;
 }
+
 ?>
 
 <!doctype html>
@@ -24,8 +26,7 @@ HTML;
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Webshop</title>
-    <link rel="stylesheet" href="css/pico.min.css">
-
+    <link rel="stylesheet" href="css/pico.min.css" type="text/css">
 </head>
 <body>
 <?php include "adminNavbar.php"; ?>

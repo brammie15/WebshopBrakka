@@ -1,31 +1,27 @@
 <?php
-    session_start();
-    $isLoggedin = false;
-    if(isset($_SESSION["user"])){
-        $isLoggedin = true;
-    }
-    if(!$isLoggedin){
-        header("Location: login.php");
-    }
-    include __DIR__."/database.php";
-    include __DIR__."/common.php";
-    include __DIR__."/product.php";
+include __DIR__ . "/database.php";
+include __DIR__ . "/common.php";
+include __DIR__ . "/product.php";
+session_start();
+$isLoggedin = isSession(['user']);
 
-    $db = getDatabaseConnection();
-    global $db;
+if (!$isLoggedin) {
+    header("Location: login.php");
+}
 
+$db = getDatabaseConnection();
 
-    $isWinkelmandjeLeeg = true;
-    if(isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0){
-        $isWinkelmandjeLeeg = false;
-    }
+$isWinkelmandjeLeeg = true;
+if (isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0) {
+    $isWinkelmandjeLeeg = false;
+}
 
-    if(!$isWinkelmandjeLeeg){
-        echo print_r($_SESSION["winkelmandje"], true);
-    }
+if (!$isWinkelmandjeLeeg) {
+//    echo print_r($_SESSION["winkelmandje"], true);
+}
 
-    //Remove duplicate products
-    //TODO: Make this not required
+//Remove duplicate products
+//TODO: Make this not required
 //if(!$isWinkelmandjeLeeg){
 //    foreach ($_SESSION["winkelmandje"] as $key => $value) {
 //        foreach ($_SESSION["winkelmandje"] as $key2 => $value2) {
@@ -40,31 +36,34 @@
 //    }
 //}
 
-    if(isset($_GET["remove"])){
-        if(sizeof($_SESSION["winkelmandje"]) == 1){
-            $_SESSION["winkelmandje"] = [];
-            header("Location: winkelmandje.php");
-        }
-        $index = $_GET["remove"];
-        $winkelmandje = $_SESSION["winkelmandje"];
-        array_splice($winkelmandje, $index, 1);
-        $_SESSION["winkelmandje"] = $winkelmandje;
+if (isset($_GET["remove"])) {
+    if (sizeof($_SESSION["winkelmandje"]) == 1) {
+        $_SESSION["winkelmandje"] = [];
         header("Location: winkelmandje.php");
     }
+    $index = $_GET["remove"];
+    $winkelmandje = $_SESSION["winkelmandje"];
+    array_splice($winkelmandje, $index, 1);
+    $_SESSION["winkelmandje"] = $winkelmandje;
+    header("Location: winkelmandje.php");
+}
 
-function generateRow($index, $productId, $aantal): string {
-        global $db;
-        $product = Product::fromId($db, $productId);
-        if(!$product){
-            return "<p>Error: Product not found</p>";
-        }
+function generateRow($db, $index, $productId, $aantal): string
+{
+    $product = Product::fromId($db, $productId);
+    if (!$product) {
+        return "<p>Error: Product not found</p>";
+    }
 
-        $totaal = $product->price * $aantal;
-        return <<<HTML
+    $totaal = $product->price * $aantal;
+    return <<<HTML
             <tr>
                 <form method="post">
                     <td>{$index}</td>
-                    <td>{$product->name}</td>
+                    <td>
+                        <img src="{$product->imageUrl}" alt="{$product->name}" height="32px" width="32px">
+                        <p>{$product->name}</p>
+                    </td>
                     <td>{$product->price} €</td>
                     <td><input type="number" min="0" value="{$aantal}"></td>
                     <td>€{$totaal}</td>
@@ -73,7 +72,8 @@ function generateRow($index, $productId, $aantal): string {
             </tr>
 HTML;
 
-    }
+}
+
 ?>
 
 <!doctype html>
@@ -91,12 +91,12 @@ HTML;
 <?php include "navbar.php" ?>
 
 <main>
-    <?php if($isWinkelmandjeLeeg): ?>
+    <?php if ($isWinkelmandjeLeeg): ?>
         <h1>Uw winkelmandje is leeg</h1>
     <?php endif; ?>
 
-    <?php if(!$isWinkelmandjeLeeg): ?>
-        <h1>Uw winkelmandje</h1>
+    <?php if (!$isWinkelmandjeLeeg): ?>
+    <h1>Uw winkelmandje</h1>
     <div id="listContainer">
         <!-- place table here-->
         <table id="products">
@@ -109,13 +109,21 @@ HTML;
                 <th>Remove</th>
             </tr>
             <?php
-                $winkelmandje = $_SESSION["winkelmandje"];
-                for($i = 0; $i < count($winkelmandje); $i++){
-                    echo generateRow($i+1, $winkelmandje[$i]["id"], $winkelmandje[$i]["aantal"]);
-                }
+            $winkelmandje = $_SESSION["winkelmandje"];
+            for ($i = 0; $i < count($winkelmandje); $i++) {
+                echo generateRow($db, $i + 1, $winkelmandje[$i]["id"], $winkelmandje[$i]["aantal"]);
+            }
             ?>
         </table>
-    <?php endif; ?>
+        <?php
+        $totaal = 0;
+        foreach ($winkelmandje as $item) {
+            $product = Product::fromId($db, $item["id"]);
+            $totaal += $product->price * $item["aantal"];
+        }
+        ?>
+        <h1>Totaal: €<?= $totaal ?></h1>
+        <?php endif; ?>
 </main>
 </body>
 </html>

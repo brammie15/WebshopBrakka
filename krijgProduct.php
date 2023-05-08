@@ -10,7 +10,7 @@
 
 
 ?>
-
+if(isset($_SESSION["winkelmandje"][$index]) and $_SESSION["winkelmandje"][$index]["id"] == $productId and $_SESSION["winkelmandje"][$index]["aantal"] == $aantal){
 <!doctype html>
 <html lang="en">
 <head>

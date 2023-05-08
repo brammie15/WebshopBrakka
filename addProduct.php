@@ -1,5 +1,7 @@
 <?php
 include "database.php";
+include "common.php";
+checkAuth(UserTypes::Employee);
 $conn = getDatabaseConnection();
 $isPostBack = isset($_POST["name"]);
 if ($isPostBack){
