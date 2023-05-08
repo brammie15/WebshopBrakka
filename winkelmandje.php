@@ -123,6 +123,7 @@ HTML;
         }
         ?>
         <h1>Totaal: €<?= $totaal ?></h1>
+        <a href="bestel.php">Bestel</a>
         <?php endif; ?>
 </main>
 </body>

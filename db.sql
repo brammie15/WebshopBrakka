@@ -1,21 +1,17 @@
 create table category
 (
-    categoryID int auto_increment
+    categoryID int auto_increment comment 'The id of the category'
         primary key,
-    name       varchar(35) not null
+    name       varchar(35) not null comment 'The name of category'
 );
 
 create table employee
 (
-    employeeID    int auto_increment
+    employeeID   int auto_increment
         primary key,
-    passwordHash  varchar(50) not null,
-    email         varchar(40) not null,
-    phone         varchar(30) not null,
-    paymentMethod varchar(50) not null,
-    streetName    varchar(40) not null,
-    streetNummer  int(10)     not null,
-    city          varchar(30) not null
+    passwordHash varchar(256) not null,
+    email        varchar(500) not null,
+    phone        varchar(100) not null
 );
 
 create table product
@@ -35,25 +31,26 @@ create table user
 (
     userID       int auto_increment
         primary key,
-    passwordHash varchar(50)  not null,
+    passwordHash varchar(256) not null,
     email        varchar(500) not null,
     phoneNumber  varchar(100) not null,
-    streetName   varchar(200) null,
-    streetNumber varchar(100) null,
-    cityName     varchar(100) null,
-    birthday     date         null,
-    postcode     varchar(20)  null
+    birthday     date         null
 );
 
 create table `order`
 (
-    orderID       int auto_increment
+    orderID         int auto_increment comment 'The id of the order'
         primary key,
-    hasBeenOrderd tinyint(1) not null,
-    orderDate     date       not null,
-    totalPrice    double     not null,
-    userID        int        not null,
-    employeeID    int        null,
+    hasBeenOrderd   tinyint(1)   not null comment 'boolean to check if the order has been confirmed',
+    orderDate       date         not null comment 'the date the order was placed',
+    totalPrice      double       not null comment 'The total price paid of the order',
+    userID          int          not null comment 'The id of the user who orderd the order',
+    employeeID      int          null comment 'The id of the empoyee who placed the order',
+    streetNumber    varchar(32)  not null comment 'The streetnummer of the order',
+    streetName      varchar(255) not null comment 'the streetName of the order',
+    cityName        varchar(255) null comment 'the city of the order',
+    postcode        varchar(32)  null,
+    hasBeenDeliverd tinyint(1)   null comment 'A boolean to check if the oder has been deliverd (aka if its done)',
     constraint order_employee_employeeID_fk
         foreign key (employeeID) references employee (employeeID),
     constraint order_user_userID_fk
