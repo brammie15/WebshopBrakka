@@ -3,15 +3,14 @@ body {
     font-size: 17px;
     margin: 0;
     padding: 0;
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
+    /*width: 100vw;*/
+    /*height: 100vh;*/
+    /*overflow: hidden;*/
 
 }
 
 main{
     margin: 0.7em;
-
 }
 * {
     box-sizing: border-box;
@@ -111,6 +110,15 @@ span.price {
     }
 }
 
+.row{
+    margin: 0 0px;
+}
+
 a{
     color: #2196F3;
+}
+
+sup{
+    color: red;
+    font-size: 0.7em;
 }

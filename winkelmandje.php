@@ -79,7 +79,9 @@ HTML;
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/bootstrap.css" type="text/css">
     <link rel="stylesheet" href="winkelmandje.css" type="text/css">
+
     <title>WinkelMandje</title>
 </head>
 <body>
@@ -118,10 +120,12 @@ HTML;
             $totaal += $product->price * $item["aantal"];
         }
         ?>
-        <div>
-            <div style="display: flex; justify-content: space-around; width: available">
+        <div style="width: 50vw">
+            <div style="display: flex; justify-content: space-around;">
                 <h1>Totaal: €<?= $totaal ?></h1>
-                <a href="bestel.php"  class="btn btn-primary" role="button">Bestel</a>
+                <div style="display: flex; justify-content: center; align-items: center">
+                    <a href="bestel.php"  class="btn btn-primary" role="button">Bestel</a>
+                </div>
             </div>
         </div>
         <?php endif; ?>

@@ -8,6 +8,11 @@
     $db = getDatabaseConnection();
     $product = Product::fromId($db, $productId);
 
+    if(!$product){
+        header("Location: index.php");
+    }
+
+
 
 ?>
 <!doctype html>
@@ -25,19 +30,11 @@
 
 
 <main>
-<!--    --><?php
-//    if($product){
-//        echo "<h1>".$product["name"]."</h1>";
-//        echo "<p>".$product["description"]."</p>";
-//        echo "<p>".$product["price"]."</p>";
-//    }else{
-//        echo "<h1>Product niet gevonden</h1>";
-//    }?>
     <div class="parent">
         <div class="child img-container">
-<!--            <img src="--><?//=$product["imageUrl"] ?><!--" alt="--><?//=$product["name"]?><!--">-->
             <div>
-                <img src="https://via.placeholder.com/256" alt="placeholder">
+                <img src="<?= $product->imageUrl ?>" alt="<?= $product->name ?>">
+<!--                <img src="https://via.placeholder.com/256" alt="placeholder">-->
             </div>
         </div>
         <div class="child price-container">
@@ -46,11 +43,20 @@
             <p><?=$product->description?></p>
             <br>
             <p><?=$product->price?> Euro</p>
+            <hr style="margin-top: 2em">
+            <style>
+                form{
+                    display: flex;
+                    flex-direction: column;
+                    align-items: center;
+                    gap: 1em;
+                }
+            </style>
             <div>
                 <form action="index.php" method="get">
                     <input type="number" name="aantal" value="1">
                     <input type="hidden" name="product" value="<?=$product->id?>">
-                    <input type="submit" value="Add to cart">
+                    <input class="koolButton" type="submit" value="Voeg toe aan winkelmandje">
                 </form>
             </div>
         </div>
