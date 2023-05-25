@@ -16,10 +16,6 @@ if (isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0) {
     $isWinkelmandjeLeeg = false;
 }
 
-if (!$isWinkelmandjeLeeg) {
-//    echo print_r($_SESSION["winkelmandje"], true);
-}
-
 //Remove duplicate products
 //TODO: Make this not required
 //if(!$isWinkelmandjeLeeg){
@@ -59,15 +55,15 @@ function generateRow($db, $index, $productId, $aantal): string
     return <<<HTML
             <tr>
                 <form method="post">
-                    <td>{$index}</td>
+                    <td>$index</td>
                     <td>
-                        <img src="{$product->imageUrl}" alt="{$product->name}" height="32px" width="32px">
-                        <p>{$product->name}</p>
+                        <img src="$product->imageUrl" alt="$product->name" height="32px" width="32px">
+                        <p>$product->name</p>
                     </td>
-                    <td>{$product->price} €</td>
-                    <td><input type="number" min="0" value="{$aantal}"></td>
-                    <td>€{$totaal}</td>
-                    <td><a id="verwijder" href="winkelmandje.php?remove={$index}">Verwijder</a></td>
+                    <td>$product->price €</td>
+                    <td><input type="number" min="0" value="$aantal"></td>
+                    <td>€$totaal</td>
+                    <td><a id="verwijder" href="winkelmandje.php?remove=$index">Verwijder</a></td>
                 </form>
             </tr>
 HTML;
@@ -122,8 +118,12 @@ HTML;
             $totaal += $product->price * $item["aantal"];
         }
         ?>
-        <h1>Totaal: €<?= $totaal ?></h1>
-        <a href="bestel.php">Bestel</a>
+        <div>
+            <div style="display: flex; justify-content: space-around; width: available">
+                <h1>Totaal: €<?= $totaal ?></h1>
+                <a href="bestel.php"  class="btn btn-primary" role="button">Bestel</a>
+            </div>
+        </div>
         <?php endif; ?>
 </main>
 </body>

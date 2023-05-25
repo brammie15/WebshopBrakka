@@ -1,7 +1,8 @@
 <?php
 include __DIR__ . "/database.php";
 include __DIR__ . "/common.php";
-include __DIR__. "/Product.php";
+include __DIR__ . "/Product.php";
+include __DIR__ . "/Winkelmand.php";
 $db = getDatabaseConnection();
 $db_success = !!$db;
 
@@ -9,7 +10,7 @@ session_start();
 //if (isset($_SESSION['user'])) {
 //    $listProduct = $_SESSION['user'];
 //}
-
+//$winekl = new Winkelmand($db);
 
 if (isGet(['product', 'aantal']) && isSession(['user'])) {
     $productId = $_GET['product'];
@@ -43,12 +44,13 @@ if (isGet(['product', 'aantal']) && isSession(['user'])) {
 }
 
 
-function createCard(Product $product): string {
+function createCard(Product $product): string
+{
     $productID = $product->id;
     $product_url = "onclick=\"location.href='krijgProduct.php?product=$productID'\"";
-    $image_url = file_exists(__DIR__."/".$product->imageUrl) ? $product->imageUrl : "https://via.placeholder.com/256";
+    $image_url = file_exists(__DIR__ . "/" . $product->imageUrl) ? $product->imageUrl : "https://via.placeholder.com/256";
 
-    $ballz = __DIR__.$product->imageUrl;
+    $ballz = __DIR__ . $product->imageUrl;
     return <<<HTML
         <div class="productCard">
             <img src="$image_url" alt="placeholder">
@@ -76,7 +78,7 @@ HTML;
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="./index.css" type="text/css">
     <title>Webshop</title>
 </head>
 <body><?php
@@ -89,15 +91,15 @@ include "navbar.php";
         <?php endif; ?>
         <h3>Op de website van de webshop</h3>
         <p>Op deze website kunt u producten kopen</p>
-<!--        --><?php
-//        if(isset($_SESSION['userType'])){
-//            echo match ($_SESSION['userType']) {
-//                UserTypes::Employee => "<p>U bent een medewerker</p>",
-//                UserTypes::Customer => "<p>U bent een Klant</p>",
-//                default => "<p>U bent een gast</p>",
-//            };
-//        }
-//        ?>
+        <!--        --><?php
+        //        if(isset($_SESSION['userType'])){
+        //            echo match ($_SESSION['userType']) {
+        //                UserTypes::Employee => "<p>U bent een medewerker</p>",
+        //                UserTypes::Customer => "<p>U bent een Klant</p>",
+        //                default => "<p>U bent een gast</p>",
+        //            };
+        //        }
+        //        ?>
     </div>
 
     <div id="productsContainer">

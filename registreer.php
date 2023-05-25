@@ -15,7 +15,6 @@
         $email = $_POST['email'];
         $password = $_POST['password'];
         $password2 = $_POST['password2'];
-        $phoneNumber = $_POST['phoneNumber'];
         $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
         if($password != $password2){
@@ -33,10 +32,9 @@
         }
 
         if(strlen($error) == 0){
-            $query = $conn->prepare("INSERT INTO `webshop`.user (email, passwordHash, phoneNumber) VALUES (:email, :passwordHash, :phoneNumber)");
+            $query = $conn->prepare("INSERT INTO `webshop`.user (email, passwordHash) VALUES (:email, :passwordHash)");
             $query->bindParam(":email", $email);
             $query->bindParam(":passwordHash", $hashedPassword);
-            $query->bindParam(":phoneNumber", $phoneNumber);
             $query->execute();
             session_start();
             $_SESSION["user"] = $email;
@@ -60,10 +58,8 @@
     <div>
         <form action="registreer.php" method="post">
             <h1>Registreer</h1>
-            <label for="email">Email</label>
+            <label for="email">Gebruikersnaam</label>
             <input name="email" type="email" id="email" required>
-            <label for="phoneNumber" >Telefoon Nummer</label>
-            <input name="phoneNumber" type="tel" id="phoneNumber" required>
             <label for="password">Wachtwoord</label>
             <input id="password" name="password" type="password">
 
@@ -75,6 +71,7 @@
             <div id="buttonsContainer">
                 <input type="submit" value="Registreer">
                 <input type="reset" name="reset">
+                <a href="login.php">Ga terug</a>
             </div>
         </form>
 

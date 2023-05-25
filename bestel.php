@@ -30,13 +30,12 @@
 </head>
 <body>
 <?php include "navbar.php"; ?>
-
 <main class="BestelContainer">
-
+    <h1>Bestellen</h1>
     <div class="row">
         <div class="col-75">
             <div class="container">
-                <form action="/">
+                <form action="bestel.php" method="post">
                     <div class="row">
                         <div class="col-50">
                             <h3>Adres</h3>

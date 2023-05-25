@@ -1,16 +1,15 @@
 <?php
     require_once "database.php";
+    include __DIR__ . "/Product.php";
     if(!isset($_GET["product"])){
         header("Location: index.php");
     }
-    $product = $_GET["product"];
+    $productId = $_GET["product"];
     $db = getDatabaseConnection();
-    $query = $db->query("SELECT * FROM `webshop`.product WHERE `webshop`.product.Name  = '$product'");
-    $product = $query->fetch();
+    $product = Product::fromId($db, $productId);
 
 
 ?>
-if(isset($_SESSION["winkelmandje"][$index]) and $_SESSION["winkelmandje"][$index]["id"] == $productId and $_SESSION["winkelmandje"][$index]["aantal"] == $aantal){
 <!doctype html>
 <html lang="en">
 <head>
@@ -19,21 +18,11 @@ if(isset($_SESSION["winkelmandje"][$index]) and $_SESSION["winkelmandje"][$index
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="krijgProduct.css">
-    <link rel="stylesheet" href="navbar/navbar.css">
-    <title>Document</title>
+    <title><?= $product->name ?></title>
 </head>
 <body>
-<nav>
-    <ul>
-        <li><a href="index.php">Home</a></li>
-        <li><a href="login.php">Login</a></li>
-        <?php if(isset($_SESSION['user'])): ?>
-            <li><a href="logout.php">Logout</a></li>
-            <!--            <li><p id="welkomText">Welkom --><?php //=$_SESSION['user']?><!--</p></li>-->
-            <li><a href="winkelmandje.php">WinkelMandje</a></li>
-        <?php endif; ?>
-    </ul>
-</nav>
+<?php include "navbar.php" ?>
+
 
 <main>
 <!--    --><?php
@@ -52,15 +41,15 @@ if(isset($_SESSION["winkelmandje"][$index]) and $_SESSION["winkelmandje"][$index
             </div>
         </div>
         <div class="child price-container">
-            <h1><?=$product["name"]?></h1>
+            <h1><?=$product->name?></h1>
             <hr>
-            <p><?=$product["description"]?> Euro</p>
+            <p><?=$product->description?></p>
             <br>
-            <p><?=$product["price"]?></p>
+            <p><?=$product->price?> Euro</p>
             <div>
-                <form>
+                <form action="index.php" method="get">
                     <input type="number" name="aantal" value="1">
-                    <input type="hidden" name="product" value="<?=$product["name"]?>">
+                    <input type="hidden" name="product" value="<?=$product->id?>">
                     <input type="submit" value="Add to cart">
                 </form>
             </div>

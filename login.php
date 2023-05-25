@@ -31,7 +31,7 @@ if ($hasSubmitted) {
     $employee = $employeeQuery->fetch();
 
     if (!$user && !$employee) {
-        $error = "Email or password is incorrect, User not found";
+        $error = "Gebruiker niet gevonden";
     }
 
     if (!$user and $employee) {
@@ -43,7 +43,7 @@ if ($hasSubmitted) {
     if (strlen($error) == 0) {
         $userPassword = $user['passwordHash'];
         if (!password_verify($password, $userPassword)) {
-            $error = "Email or password is incorrect, Password Incorrect";
+            $error = "Email of Wachtwoord is incorrect";
         }
     }
     if (strlen($error) == 0) {
@@ -69,7 +69,7 @@ if ($hasSubmitted) {
     <div>
         <form action="login.php" method="post">
             <h1>Login</h1>
-            <label for="email">Email</label>
+            <label for="email">Gebruikersnaam</label>
             <input name="email" type="text" id="email" required>
             <label for="password">Password</label>
             <input id="password" name="password" type="password">

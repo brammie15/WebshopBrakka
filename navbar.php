@@ -14,7 +14,7 @@ if (isset($_SESSION['user'])) {
     $pages['logout.php'] = 'Logout';
 }
 ?>
-<link rel="stylesheet" href="/navbar.css" type="text/css">
+<link rel="stylesheet" href="./navbar.css" type="text/css">
 <nav>
     <ul>
         <?php foreach ($pages as $filename => $pageTitle) { ?>
