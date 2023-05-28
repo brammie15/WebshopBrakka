@@ -1,8 +1,8 @@
 <?php
     include "common.php";
-    session_start();
     include "database.php";
-    include "product.php";
+    include "Product.php";
+    session_start();
     $isLoggedin = isSession(['user']);
     $db = getDatabaseConnection();
 
@@ -18,7 +18,6 @@
     }
 
     if(isPost(['adres'])){
-        $query = $db->prepare("INSERT INTO `webshop`.`order` (totalPrice, userID, cityName, postcode, adres, creditCardNumber, cvv) VALUES (:totalPrice, :userID, :cityName, :postcode, :adres, :creditCardNumber, :cvv)");
 
         $total = 0;
         foreach ($_SESSION["winkelmandje"] as $product) {
@@ -28,19 +27,43 @@
 
         $userId = $db->query("SELECT userID FROM `webshop`.user WHERE username = '" . $_SESSION["user"] . "'");
         $userId->execute();
-        $userId = $userId->fetch()["userID"];
+        $userId = $userId->fetch();
+        if(!$userId){
+            $userId = $db->query("SELECT employeeID FROM `webshop`.employee WHERE  = '" . $_SESSION["user"] . "'");
+            $userId->execute();
+            $userId = $userId->fetch();
+            if(!$userId){
+                die("Error: User not found");
+            }
+        }
+
+        if($_SESSION["usertype"] == UserTypes::Employee) {
+            $query = $db->prepare("INSERT INTO `webshop`.`order` (totalPrice, employeeID, cityName, postcode, adres, creditCardNumber, cvv) VALUES (:totalPrice, :employeeID, :cityName, :postcode, :adres, :creditCardNumber, :cvv)");
+
+            $query->execute([
+                'totalPrice' => $total,
+                'employeeID' => $userId,
+                'cityName' => $_POST["city"],
+                'postcode' => $_POST["zip"],
+                'adres' => $_POST["adres"],
+                'creditCardNumber' => $_POST["cardnumber"],
+                'cvv' => $_POST["cvv"]
+            ]);
+        }else{
+            $query = $db->prepare("INSERT INTO `webshop`.`order` (totalPrice, userID, cityName, postcode, adres, creditCardNumber, cvv) VALUES (:totalPrice, :userID, :cityName, :postcode, :adres, :creditCardNumber, :cvv)");
+
+            $query->execute([
+                'totalPrice' => $total,
+                'userID' => $userId,
+                'cityName' => $_POST["city"],
+                'postcode' => $_POST["zip"],
+                'adres' => $_POST["adres"],
+                'creditCardNumber' => $_POST["cardnumber"],
+                'cvv' => $_POST["cvv"]
+            ]);
+        }
 
 
-        $query->execute([
-            'totalPrice' => $total,
-//            'orderDate' => date("Y-m-d H:i:s"),
-            'userID' => $userId,
-            'cityName' => $_POST["city"],
-            'postcode' => $_POST["zip"],
-            'adres' => $_POST["adres"],
-            'creditCardNumber' => $_POST["cardnumber"],
-            'cvv' => $_POST["cvv"]
-        ]);
 
         $orderId = $db->lastInsertId();
 

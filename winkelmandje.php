@@ -1,7 +1,9 @@
 <?php
+
+
 include __DIR__ . "/database.php";
 include __DIR__ . "/common.php";
-include __DIR__ . "/product.php";
+include __DIR__ . "/Product.php";
 session_start();
 $isLoggedin = isSession(['user']);
 
@@ -10,9 +12,10 @@ if (!$isLoggedin) {
 }
 
 $db = getDatabaseConnection();
+$winkelmandje = $_SESSION["winkelmandje"];
 
 $isWinkelmandjeLeeg = true;
-if (isset($_SESSION["winkelmandje"]) and count($_SESSION["winkelmandje"]) > 0) {
+if (count($winkelmandje) > 0) {
     $isWinkelmandjeLeeg = false;
 }
 
@@ -52,6 +55,7 @@ function generateRow($db, $index, $productId, $aantal): string
     }
 
     $totaal = $product->price * $aantal;
+
     return <<<HTML
             <tr>
                 <form method="post">
@@ -67,8 +71,8 @@ function generateRow($db, $index, $productId, $aantal): string
                 </form>
             </tr>
 HTML;
-
 }
+
 
 ?>
 
@@ -109,26 +113,26 @@ HTML;
             <?php
             $winkelmandje = $_SESSION["winkelmandje"];
             for ($i = 0; $i < count($winkelmandje); $i++) {
+
                 echo generateRow($db, $i + 1, $winkelmandje[$i]["id"], $winkelmandje[$i]["aantal"]);
             }
             ?>
         </table>
-        <?php
-        $totaal = 0;
-        foreach ($winkelmandje as $item) {
-            $product = Product::fromId($db, $item["id"]);
-            $totaal += $product->price * $item["aantal"];
-        }
-        ?>
-        <div style="width: 50vw">
-            <div style="display: flex; justify-content: space-around;">
-                <h1>Totaal: €<?= $totaal ?></h1>
-                <div style="display: flex; justify-content: center; align-items: center">
-                    <a href="bestel.php"  class="btn btn-primary" role="button">Bestel</a>
+            <?php
+            $totaal = 0;
+            foreach ($winkelmandje as $item) {
+                $product = Product::fromId($db, $item["id"]);
+                $totaal += $product->price * $item["aantal"];
+            }
+            ?>
+                <div style="display: flex; justify-content: space-around;">
+                    <h1>Totaal: €<?= $totaal ?></h1>
+                    <div style="display: flex; justify-content: center; align-items: center">
+                        <a href="bestel.php"  class="btn btn-primary" role="button">Bestel</a>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <?php endif; ?>
+            <?php endif; ?>
+
 </main>
 </body>
 </html>

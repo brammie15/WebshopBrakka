@@ -14,7 +14,7 @@ if (isPost(["username","password"])) {
     $userQuery = $db->query("SELECT user.username, user.passwordHash FROM `webshop`.user WHERE `webshop`.user.username = '$username'");
     $user = $userQuery->fetch();
 
-    $employeeQuery = $db->query("SELECT employee.email, employee.passwordHash FROM `webshop`.employee WHERE `webshop`.employee.email = '$username'");
+    $employeeQuery = $db->query("SELECT employee.username, employee.passwordHash FROM `webshop`.employee WHERE `webshop`.employee.username = '$username'");
     $employee = $employeeQuery->fetch();
 
     if (!$user && !$employee) {
