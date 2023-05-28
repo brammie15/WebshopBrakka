@@ -3,31 +3,18 @@ include "database.php";
 include "common.php";
 
 $db = getDatabaseConnection();
-$db_success = false;
-if ($db) {
-    $db_success = true;
-}
 
-$hasSubmitted = false;
-if (
-    isset($_POST["email"]) and
-    isset($_POST["password"])
-) {
-    $hasSubmitted = true;
-}
 $error = "";
-$code = "";
-if ($hasSubmitted) {
+if (isPost(["username","password"])) {
     $password = $_POST["password"];
-    $email = $_POST["email"];
+    $username = $_POST["username"];
     $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-
     $accountType = UserTypes::Customer;
 
-    $userQuery = $db->query("SELECT user.email, user.passwordHash FROM `webshop`.user WHERE `webshop`.user.email = '$email'");
+    $userQuery = $db->query("SELECT user.username, user.passwordHash FROM `webshop`.user WHERE `webshop`.user.username = '$username'");
     $user = $userQuery->fetch();
 
-    $employeeQuery = $db->query("SELECT employee.email, employee.passwordHash FROM `webshop`.employee WHERE `webshop`.employee.email = '$email'");
+    $employeeQuery = $db->query("SELECT employee.email, employee.passwordHash FROM `webshop`.employee WHERE `webshop`.employee.email = '$username'");
     $employee = $employeeQuery->fetch();
 
     if (!$user && !$employee) {
@@ -48,7 +35,7 @@ if ($hasSubmitted) {
     }
     if (strlen($error) == 0) {
         session_start();
-        $_SESSION["user"] = $email;
+        $_SESSION["user"] = $username;
         $_SESSION["userType"] = $accountType;
         header("Location: index.php");
     }
@@ -61,34 +48,27 @@ if ($hasSubmitted) {
     <meta name="viewport"
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <link rel="stylesheet" href="login.css">
     <title>Login</title>
+    <link rel="stylesheet" href="login.css">
 </head>
 <body>
-<div id="mainLogin">
-    <div>
-        <form action="login.php" method="post">
-            <h1>Login</h1>
-            <label for="email">Gebruikersnaam</label>
-            <input name="email" type="text" id="email" required>
-            <label for="password">Password</label>
-            <input id="password" name="password" type="password">
-            <br>
-            <div id="buttonsContainer">
-                <input type="submit" value="Login">
-                <input type="reset" name="reset">
-            </div>
-            <div>
-                <p>Nog geen account?</p>
-                <a href="registreer.php">Registreer</a>
-            </div>
-        </form>
-        <?php
-        if (strlen($error) > 0) {
-            echo "<p id='error'>" . $error . "</p>";
-        }
-        ?>
-    </div>
-</div>
+<main>
+    <form action="login.php" method="post">
+        <h1 style="font-size: 3em;">Login</h1>
+        <label for="Username">Gebruikersnaam<span style="color: red">*</span></label>
+        <input type="text" name="username" id="Username" required>
+        <label for="password">Wachtwoord<span style="color: red">*</span></label>
+        <input type="password" name="password" id="password" required>
+
+        <hr>
+
+        <input type="submit" value="Login">
+        <p>Geen account? <a href="registreer.php">Registreer</a></p>
+        <?php if($error != ""): ?>
+            <p class="error" style=""><?php echo $error; ?></p>
+        <?php endif; ?>
+
+    </form>
+</main>
 </body>
 </html>

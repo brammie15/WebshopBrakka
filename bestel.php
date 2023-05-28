@@ -26,7 +26,7 @@
             $total += $productObj->price;
         }
 
-        $userId = $db->query("SELECT userID FROM `webshop`.user WHERE email = '" . $_SESSION["user"] . "'");
+        $userId = $db->query("SELECT userID FROM `webshop`.user WHERE username = '" . $_SESSION["user"] . "'");
         $userId->execute();
         $userId = $userId->fetch()["userID"];
 

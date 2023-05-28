@@ -22,7 +22,7 @@
         }
 
         if(strlen($error) == 0){
-            $query = $conn->prepare("SELECT * FROM `webshop`.user WHERE `webshop`.user.email = :email");
+            $query = $conn->prepare("SELECT * FROM `webshop`.user WHERE `webshop`.user.username = :email");
             $query->bindParam(":email", $email);
             $query->execute();
             $user = $query->fetch();
@@ -32,7 +32,7 @@
         }
 
         if(strlen($error) == 0){
-            $query = $conn->prepare("INSERT INTO `webshop`.user (email, passwordHash) VALUES (:email, :passwordHash)");
+            $query = $conn->prepare("INSERT INTO `webshop`.user (username, passwordHash) VALUES (:email, :passwordHash)");
             $query->bindParam(":email", $email);
             $query->bindParam(":passwordHash", $hashedPassword);
             $query->execute();
