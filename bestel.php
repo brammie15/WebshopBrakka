@@ -25,10 +25,11 @@
             $total += $productObj->price;
         }
 
-        $userId = $db->query("SELECT userID FROM `webshop`.user WHERE username = '" . $_SESSION["user"] . "'");
+        $userId = $db->prepare("SELECT userID FROM `webshop`.user WHERE username = :username");
+        $userId->bindParam(":username", $_SESSION["user"]);
         $userId->execute();
         $userId = $userId->fetch();
-        if(!$userId){
+        if(!isset($userId)){
             $userId = $db->query("SELECT employeeID FROM `webshop`.employee WHERE  = '" . $_SESSION["user"] . "'");
             $userId->execute();
             $userId = $userId->fetch();
@@ -37,12 +38,12 @@
             }
         }
 
-        if($_SESSION["usertype"] == UserTypes::Employee) {
+        if($_SESSION["userType"] == UserTypes::Employee) {
             $query = $db->prepare("INSERT INTO `webshop`.`order` (totalPrice, employeeID, cityName, postcode, adres, creditCardNumber, cvv) VALUES (:totalPrice, :employeeID, :cityName, :postcode, :adres, :creditCardNumber, :cvv)");
 
             $query->execute([
                 'totalPrice' => $total,
-                'employeeID' => $userId,
+                'employeeID' => $userId["employeeID"],
                 'cityName' => $_POST["city"],
                 'postcode' => $_POST["zip"],
                 'adres' => $_POST["adres"],
@@ -50,17 +51,17 @@
                 'cvv' => $_POST["cvv"]
             ]);
         }else{
+//            print_r($_POST);
+            print_r($userId);
             $query = $db->prepare("INSERT INTO `webshop`.`order` (totalPrice, userID, cityName, postcode, adres, creditCardNumber, cvv) VALUES (:totalPrice, :userID, :cityName, :postcode, :adres, :creditCardNumber, :cvv)");
-
-            $query->execute([
-                'totalPrice' => $total,
-                'userID' => $userId,
-                'cityName' => $_POST["city"],
-                'postcode' => $_POST["zip"],
-                'adres' => $_POST["adres"],
-                'creditCardNumber' => $_POST["cardnumber"],
-                'cvv' => $_POST["cvv"]
-            ]);
+            $query->bindParam(':totalPrice', $total);
+            $query->bindParam(':userID', $userId["userID"]);
+            $query->bindParam(':cityName', $_POST["city"]);
+            $query->bindParam(':postcode', $_POST["zip"]);
+            $query->bindParam(':adres', $_POST["adres"]);
+            $query->bindParam(':creditCardNumber', $_POST["cardnumber"]);
+            $query->bindParam(':cvv', $_POST["cvv"]);
+            $query->execute();
         }
 
 

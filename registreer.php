@@ -36,9 +36,8 @@
             $query->bindParam(":email", $email);
             $query->bindParam(":passwordHash", $hashedPassword);
             $query->execute();
-            session_start();
-            $_SESSION["user"] = $email;
-            header("Location: index.php");
+
+            header("Location: login.php");
         }
     }
 ?>
@@ -54,35 +53,30 @@
     <title>Registreer</title>
 </head>
 <body>
-<div id="mainLogin">
+<main id="mainLogin">
     <div>
         <form action="registreer.php" method="post">
-            <h1>Registreer</h1>
-            <label for="email">Gebruikersnaam</label>
-            <input name="email" type="email" id="email" required>
-            <label for="password">Wachtwoord</label>
+            <h1 style="font-size: 3em;">Registreer</h1>
+            <label for="username">Gebruikersnaam<span style="color: red">*</span></label>
+            <input name="email" type="text" id="username" required>
+            <label for="password">Wachtwoord<span style="color: red">*</span></label>
             <input id="password" name="password" type="password">
 
-            <label for="password2">Herhaal Wachtwoord</label>
+            <label for="password2">Herhaal Wachtwoord<span style="color: red">*</span></label>
             <input id="password2" name="password2" type="password">
 
             <input type="hidden" value="true" name="hasBeenSubmitted">
 
             <div id="buttonsContainer">
                 <input type="submit" value="Registreer">
-                <input type="reset" name="reset">
-                <a href="login.php">Ga terug</a>
             </div>
+            <br>
+            <a href="login.php">Ga terug</a>
+            <?php if($error != ""): ?>
+                <p class="error" style=""><?php echo $error; ?></p>
+            <?php endif; ?>
         </form>
-
-        <div id="error">
-            <?php
-                if(strlen($error) > 0){
-                    echo $error;
-                }
-            ?>
-        </div>
     </div>
-</div>
+</main>
 </body>
 </html>

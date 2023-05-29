@@ -88,6 +88,7 @@ include "navbar.php";
     <div id="top">
         <?php if (isset($_SESSION['user'])): ?>
             <h1 id="welkomText">Welkom <?= $_SESSION['user'] ?></h1>
+            <hr style="width: 33vw">
         <?php endif; ?>
         <h3>Op de website van de webshop</h3>
         <p>Op deze website kunt u producten kopen</p>
