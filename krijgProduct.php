@@ -7,12 +7,9 @@
     $productId = $_GET["product"];
     $db = getDatabaseConnection();
     $product = Product::fromId($db, $productId);
-
     if(!$product){
         header("Location: index.php");
     }
-
-
 
 ?>
 <!doctype html>
@@ -56,7 +53,7 @@
                 <form action="index.php" method="get">
                     <input type="number" name="aantal" value="1">
                     <input type="hidden" name="product" value="<?=$product->id?>">
-                    <input class="koolButton" type="submit" value="Voeg toe aan winkelmandje">
+                    <input type="submit" value="Add to cart">
                 </form>
             </div>
         </div>

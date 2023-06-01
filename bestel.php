@@ -77,6 +77,9 @@
                 'amount' => $product["aantal"],
             ]);
         }
+
+        unset($_SESSION["winkelmandje"]);
+        header("Location: index.php");
     }
 
 ?>
