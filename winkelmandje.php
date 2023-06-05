@@ -11,6 +11,10 @@ if (!$isLoggedin) {
     header("Location: login.php");
 }
 
+if(!isSession(["winkelmandje"])){
+    $_SESSION["winkelmandje"] = [];
+}
+
 $db = getDatabaseConnection();
 $winkelmandje = $_SESSION["winkelmandje"];
 
@@ -47,14 +51,14 @@ if (isset($_GET["remove"])) {
     header("Location: winkelmandje.php");
 }
 
-if(isPost(["aantal"])){
-$index = $_POST["index"];
-    $aantal = $_POST["aantal"];
-    $winkelmandje = $_SESSION["winkelmandje"];
-    $winkelmandje[$index]["aantal"] = $aantal;
-    $_SESSION["winkelmandje"] = $winkelmandje;
-    header("Location: winkelmandje.php");
-}
+//if(isPost(["newAantal"])){
+//    $index = $_POST["index"];
+//    $aantal = $_POST["newAantal"];
+//    $winkelmandje = $_SESSION["winkelmandje"];
+//    $winkelmandje[$index]["aantal"] = $aantal;
+//    $_SESSION["winkelmandje"] = $winkelmandje;
+//    header("Location: winkelmandje.php");
+//}
 
 function generateRow($db, $index, $productId, $aantal): string
 {
@@ -74,10 +78,10 @@ function generateRow($db, $index, $productId, $aantal): string
                         <p>$product->name</p>
                     </td>
                     <td>$product->price €</td>
-                    <td><input type="number" min="0" value="$aantal"></td>
+                    <td><input type="number" min="0" value="$aantal" name="newAantal"><input name="submit" class="btn btn-primary" role="button" type="submit" value="Opslaan"></td>
                     <td>€$totaal</td>
-                    <td><a id="verwijder" href="winkelmandje.php?remove=$index">Verwijder</a><input name="submit" </td>
-                    
+                    <td><a id="verwijder" href="winkelmandje.php?remove=$index">Verwijder</a></td>
+//                    
                 </form>
             </tr>
 HTML;
@@ -107,7 +111,8 @@ HTML;
         <h1>Uw winkelmandje is leeg</h1>
     <?php endif; ?>
 
-    <?php if (!$isWinkelmandjeLeeg): ?>
+    <?php if (!$isWinkelmandjeLeeg): print_r($winkelmandje); ?>
+
     <h1>Uw winkelmandje</h1>
     <div id="listContainer">
         <!-- place table here-->

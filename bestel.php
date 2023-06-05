@@ -79,7 +79,7 @@
         }
 
         unset($_SESSION["winkelmandje"]);
-        header("Location: index.php");
+        header("Location: succes.php");
     }
 
 ?>
@@ -128,19 +128,19 @@
                         <div class="col-50">
                             <h3>Betalen</h3>
                                 <i class="fa fa-cc-discover" style="color:orange;"></i>
-                            <label for="cname">Naam op de kaart<sup>*</sup></label>
+                            <label for="cname">Naam op de kaart</label>
                             <input type="text" id="cname" name="cardname" placeholder="Jhonny Jhonson" required>
-                            <label for="ccnum">Credit card number<sup>*</sup></label>
+                            <label for="ccnum">Credit card number</label>
                             <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx" required>
-                            <label for="expmonth">Vervalmaand<sup>*</sup></label>
+                            <label for="expmonth">Vervalmaand</label>
                             <input type="text" id="expmonth" name="expmonth" placeholder="September" required>
                             <div class="row">
                                 <div class="col-50">
-                                    <label for="expyear">Verval Jaar<sup>*</sup></label>
+                                    <label for="expyear">Verval Jaar</label>
                                     <input type="text" id="expyear" name="expyear" placeholder="2018" required>
                                 </div>
                                 <div class="col-50">
-                                    <label for="cvv">CVV<sup>*</sup></label>
+                                    <label for="cvv">CVV</label>
                                     <input type="text" id="cvv" name="cvv" placeholder="352" required>
                                 </div>
                             </div>
