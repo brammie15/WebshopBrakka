@@ -34,12 +34,7 @@ $userID = $userID->fetch();
 $bestellingen = $db->prepare("SELECT * FROM `order` WHERE userID = :id");
 $bestellingen->bindParam(":id", $userID["userID"]);
 $bestellingen->execute();
-$bestellingen = $bestellingen->fetch();
-
-$orderxprodcut = $db->prepare("SELECT * FROM orderproduct WHERE orderID = :id");
-$orderxprodcut->bindParam(":id", $bestellingen["orderID"]);
-$orderxprodcut->execute();
-$orderxprodcut = $orderxprodcut->fetchAll();
+$bestellingen = $bestellingen->fetchAll();
 
 
 
@@ -62,6 +57,14 @@ $orderxprodcut = $orderxprodcut->fetchAll();
 
 <main>
     <h1>Bestellingen</h1>
+    <?php foreach ($bestellingen as $bestelling): ?>
+        <?php
+            $orderxprodcut = $db->prepare("SELECT * FROM orderproduct WHERE orderID = :id");
+
+            $orderxprodcut->bindParam(":id", $bestelling["orderID"]);
+            $orderxprodcut->execute();
+            $orderxprodcut = $orderxprodcut->fetchAll();
+        ?>
     <table id="products">
         <tr>
             <th>Bestelling</th>
@@ -77,7 +80,7 @@ $orderxprodcut = $orderxprodcut->fetchAll();
             $product = $product->fetch();
             ?>
             <tr>
-                <td><?= $bestellingen["orderID"] ?></td>
+                <td><?= $bestelling["orderID"] ?></td>
                 <td><?= $product["name"] ?></td>
                 <td><?= $product["price"] ?></td>
                 <td><?= $products["amount"] ?></td>
@@ -85,6 +88,9 @@ $orderxprodcut = $orderxprodcut->fetchAll();
             </tr>
         <?php endforeach; ?>
     </table>
+    <br/>
+    <br/>
+    <?php endforeach; ?>
 </main>
 
 
