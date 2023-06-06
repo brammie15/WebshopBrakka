@@ -2,6 +2,7 @@
 $pages = array(
    '../index.php' => 'Home',
     'addProduct.php' => 'Add Product',
+    'addCategory.php' => 'Add Category',
 );
 
 ?>

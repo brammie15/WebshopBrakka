@@ -109,15 +109,11 @@
                             <label for="email"><i class="fa fa-envelope"></i>E-mail<sup>*</sup></label>
                             <input type="text" id="email" name="email" placeholder="example@example.com" required>
                             <label for="adres"><i class="fa fa-address-card-o"></i>Adres<sup>*</sup></label>
-                            <input type="text" id="adres" name="adres" placeholder="542 W. 15th Street" required>
+                            <input type="text" id="adres" name="adres" placeholder="Steenstraat 123" required>
                             <label for="city"><i class="fa fa-institution"></i>Stad<sup>*</sup></label>
-                            <input type="text" id="city" name="city" placeholder="New York" required>
+                            <input type="text" id="city" name="city" placeholder="Brugge" required>
 
                             <div class="row">
-                                <div class="col-50">
-                                    <label for="state">Gewest<sup>*</sup></label>
-                                    <input type="text" id="state" name="state" placeholder="West-Vlaanderen" required>
-                                </div>
                                 <div class="col-50">
                                     <label for="zip">Postcode<sup>*</sup></label>
                                     <input type="text" id="zip" name="zip" placeholder="8850" required>
@@ -128,20 +124,20 @@
                         <div class="col-50">
                             <h3>Betalen</h3>
                                 <i class="fa fa-cc-discover" style="color:orange;"></i>
-                            <label for="cname">Naam op de kaart</label>
-                            <input type="text" id="cname" name="cardname" placeholder="Jhonny Jhonson" required>
+                            <label for="cname">Naam op de kaart</label
+                            <input type="text" id="cname" name="cardname" placeholder="Jhonny Jhonson">
                             <label for="ccnum">Credit card number</label>
-                            <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx" required>
+                            <input type="text" id="ccnum" name="cardnumber" placeholder="xxxx-xxxx-xxxx-xxxx" >
                             <label for="expmonth">Vervalmaand</label>
-                            <input type="text" id="expmonth" name="expmonth" placeholder="September" required>
+                            <input type="text" id="expmonth" name="expmonth" placeholder="September" >
                             <div class="row">
                                 <div class="col-50">
                                     <label for="expyear">Verval Jaar</label>
-                                    <input type="text" id="expyear" name="expyear" placeholder="2018" required>
+                                    <input type="text" id="expyear" name="expyear" placeholder="2018">
                                 </div>
                                 <div class="col-50">
                                     <label for="cvv">CVV</label>
-                                    <input type="text" id="cvv" name="cvv" placeholder="352" required>
+                                    <input type="text" id="cvv" name="cvv" placeholder="352">
                                 </div>
                             </div>
                         </div>

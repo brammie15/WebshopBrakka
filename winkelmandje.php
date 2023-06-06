@@ -39,14 +39,23 @@ if (count($winkelmandje) > 0) {
 //    }
 //}
 
-if (isset($_GET["remove"])) {
+if (isGet(["remove"])) {
     if (sizeof($_SESSION["winkelmandje"]) == 1) {
         $_SESSION["winkelmandje"] = [];
         header("Location: winkelmandje.php");
     }
     $index = $_GET["remove"];
     $winkelmandje = $_SESSION["winkelmandje"];
-    array_splice($winkelmandje, $index, 1);
+    array_splice($winkelmandje, $index-1, 1);
+    $_SESSION["winkelmandje"] = $winkelmandje;
+    header("Location: winkelmandje.php");
+}
+
+if (isPost(["newAantal"])){
+    $index = $_POST["index"];
+    $aantal = $_POST["newAantal"];
+    $winkelmandje = $_SESSION["winkelmandje"];
+    $winkelmandje[$index]["aantal"] = $aantal;
     $_SESSION["winkelmandje"] = $winkelmandje;
     header("Location: winkelmandje.php");
 }
@@ -67,21 +76,23 @@ function generateRow($db, $index, $productId, $aantal): string
         return "<p>Error: Product not found</p>";
     }
 
+    $arrayIndex = $index - 1;
+
     $totaal = $product->price * $aantal;
 
     return <<<HTML
             <tr>
-                <form method="post">
+                <form method="post" action="winkelmandje.php">
+                    <input type="hidden" name="index" value="$arrayIndex">
                     <td>$index</td>
                     <td>
                         <img src="$product->imageUrl" alt="$product->name" height="32px" width="32px">
                         <p>$product->name</p>
                     </td>
                     <td>$product->price €</td>
-                    <td><input type="number" min="0" value="$aantal" name="newAantal"><input name="submit" class="btn btn-primary" role="button" type="submit" value="Opslaan"></td>
+                    <td><input type="number" min="0" value="$aantal" name="newAantal"><input name="submit" class="btn btn-primary" role="button" type="submit" value="Opslaan" name="update""></td>
                     <td>€$totaal</td>
                     <td><a id="verwijder" href="winkelmandje.php?remove=$index">Verwijder</a></td>
-//                    
                 </form>
             </tr>
 HTML;
@@ -111,7 +122,7 @@ HTML;
         <h1>Uw winkelmandje is leeg</h1>
     <?php endif; ?>
 
-    <?php if (!$isWinkelmandjeLeeg): print_r($winkelmandje); ?>
+    <?php if (!$isWinkelmandjeLeeg): ?>
 
     <h1>Uw winkelmandje</h1>
     <div id="listContainer">

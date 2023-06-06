@@ -57,7 +57,7 @@ function createCard(Product $product): string
             <h2>$product->name</h2>
             <p>$product->price Euro</p>
             <form action="index.php" method="get">
-                <input type="number" name="aantal" value="1">
+                <input type="number" name="aantal" value="1" min="1">
                 <input type="hidden" name="product" value="$product->id">
                 <input type="submit" value="Add to cart">
             </form>

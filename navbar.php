@@ -7,6 +7,7 @@ $pages = array(
 if (isset($_SESSION['user'])) {
     unset($pages['login.php']);
     $pages['winkelmandje.php'] = 'Winkelmandje';
+    $pages['bestellingen.php'] = "Bestellingen";
     if($_SESSION['userType'] == UserTypes::Employee){
         $pages['admin.php'] = 'Admin';
     }
